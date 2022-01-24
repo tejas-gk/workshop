@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    container_name: app_database
+    ports:
+      - '3307:3306'
+    environment: 
+      MYSQL_SERVER: db
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - app-db:/var/lib/mysql
+
+  php:
+    build: .
+    ports:
+      - '8000:80'
+    container_name: app_frontend
+    environment: 
+      MYSQL_SERVER: db
+      MYSQL_DATABASE: app
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+    volumes: 
+      - .:/var/www/html 
+
+volumes: 
+  app-db:
